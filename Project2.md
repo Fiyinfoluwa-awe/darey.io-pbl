@@ -168,7 +168,10 @@ command - `nano /var/www/projectLEMP/todo_list.php`
 
 ![creating php script](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/f8ad357e-2cec-4d7c-8ffb-860c809896a4)
 
+![end of project 2](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/2d5597b6-cc70-4a6e-a31d-6ed5fa240d6d)
+
 Broswer check, showing the content I’ve inserted in my test table:,
 
-![end of project 2](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/2d5597b6-cc70-4a6e-a31d-6ed5fa240d6d)
+![browser check at the end of project 2](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/8c8d7a66-9655-4d78-b74c-ea59aa778818)
+
 
