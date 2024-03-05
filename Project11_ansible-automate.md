@@ -61,3 +61,17 @@ sudo apt-get install -y jenkins
 sudo systemctl status jenkins
 ```
 
+![step 7 systemctl status jenkins](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/2f71048c-83b1-4628-9335-c051eab0cc56)
+
+By default, Jenkins server uses TCP port 8080. So opened this port, by creating a new Inbound Rule in the EC2 Security Group.
+
+![step 8 editing the inbound rule of jenkins-ansible](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/eb2b17a9-5803-4fd2-bd6a-03ae0b3301b9)
+
+Performed  initial Jenkins setup.
+
+From my browser, accessed `http://<Jenkins-Server-Public-IP-Address-or-Public-DNS-Name>:8080`. I was prompted for a default admin password.
+
+![step 9 jenkins browser check ](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/506b6516-66e8-4445-a729-3698e10a96db)
+
+
+
