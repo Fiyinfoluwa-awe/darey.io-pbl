@@ -35,6 +35,29 @@ sudo apt install openjdk-11-jre
 java -version
 ```
 
+
 ![step 2 sudo apt update](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/e757e26c-9a02-41ca-875e-df1080c66972)
 
+![step 5 install jenkins](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/86cd4ade-ce20-4edb-8c54-a3de7dbca4a1)
+
+![step 6 java version](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/1553f8da-96cd-41f8-8b8f-d5aec60f1c6d)
+
+Installed Jenkins. You can refer to the official Jenkins Documentation
+
+```
+curl -fsSL https://pkg.jenkins.io/debian/jenkins.io-2023.key | sudo tee \
+/usr/share/keyrings/jenkins-keyring.asc > /dev/null
+
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+https://pkg.jenkins.io/debian binary/ | sudo tee \
+/etc/apt/sources.list.d/jenkins.list > /dev/null
+
+sudo apt-get update
+
+sudo apt-get install -y jenkins
+
+#Confirm Jenkins is up and running
+
+sudo systemctl status jenkins
+```
 
