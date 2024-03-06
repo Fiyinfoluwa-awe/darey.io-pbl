@@ -73,5 +73,14 @@ From my browser, accessed `http://<Jenkins-Server-Public-IP-Address-or-Public-DN
 
 ![step 9 jenkins browser check ](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/506b6516-66e8-4445-a729-3698e10a96db)
 
+The default password was retrieved with the command `sudo cat /var/lib/jenkins/secrets/initialAdminPassword`
+
+![step 10 getting the admin password](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/41aeddae-270d-47be-a479-732c75d09a17)
+
+Installed the suggested plugins and that completes the installation of Jenkins.
+
+![step 11 installed suggested pluginns](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/2947b7c4-29b1-4b0d-b50e-0fc94db0385d)
+
+![installing dependencies ](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/6242fd32-6111-4a9c-ac7a-d500a3607800)
 
 
