@@ -83,4 +83,17 @@ Installed the suggested plugins and that completes the installation of Jenkins.
 
 ![installing dependencies ](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/6242fd32-6111-4a9c-ac7a-d500a3607800)
 
+Once plugins installation is done – created an admin user and you will get your Jenkins server address.
 
+![creating first  addmin user](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/0f4f5a95-5e29-491d-8c1a-3db6cb644246)
+
+![instance configuration](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/922af071-f6b1-4730-9e7f-99ad36d33825)
+
+### CONFIGURE JENKINS TO RETRIEVE SOURCE CODE FROM GITHUB USING WEBHOOKS
+In my GitHub account, created a new repository and named it 'ansible-config-mgt'
+
+ I will be configuring a Jenkins job/project. This job will be triggered by GitHub webhooks and will execute a ‘build’ task to retrieve codes from GitHub and store it locally on the Jenkins server.
+
+To enable webhooks in GitHub repository, I opened the `ansible-config-mgt` repository. Then click on "settings" and click on "webhooks".
+
+![creating the webhook](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/94e43ea2-acec-43c8-ba64-e3a4f09b8a37)
