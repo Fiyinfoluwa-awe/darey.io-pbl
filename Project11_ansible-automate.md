@@ -131,13 +131,42 @@ The Dev in DevOpsmeans you will be required to write some codes and should have 
 ![opened my repo on vscode](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/e0c4a470-efaa-49c4-9323-457c390e7a39)
 
 Cloned my ansible-config-mgt repo to my Jenkins-Ansible instance
-git clone <ansible-config-mgt repo link>
+
+`git clone <ansible-config-mgt repo link>`
 
 ![cloning the repo on jenkins-anible repo](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/c3b4d431-fe6c-4168-96dd-da942661a894)
 
 ### Step 3: Begin Ansible Development
-In the ansible-config-mgt GitHub repository, create a new branch that will be used for development of a new feature.
+In the ansible-config-mgt GitHub repository, created a new branch that will be used for development of a new feature.
 
-git checkout -b new_feature
+`git checkout -b new_feature`
+
+Checkout the newly created feature branch to your local machine and start building your code and directory structure.
+
+`git checkout -b new_feature`
+
+Created a directory named playbooks. It will be used to store all my playbook files. 
+
+`mkdir playbooks`
+
+![creating branch, mkdir playbook ](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/251e3c34-bab2-460d-b899-2946eb7be83e)
+
+Created a directory named inventory. It will be used to keep my hosts organised. 
+
+`mkdir inventory`
+
+Within the playbooks folder, created my first playbook and named it 'common.yml'
+```
+cd playbooks
+ touch common.yml
+```
+
+![creating inevntory , common yml ](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/63756f6f-adf4-4db1-8ecd-5638033e4f30)
+
+Within the inventory folder, create an inventory file for each environment (Development, Staging, Testing and Production) named dev, staging, uat and prod respectively. These files use .ini languages style to configure Ansible hosts.
+
+![creating the dev staging uat prod files](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/19a9d5a3-40f2-4451-934b-2196fc6e30f4)
+
+
 
 
