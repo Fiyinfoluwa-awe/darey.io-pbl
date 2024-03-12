@@ -75,7 +75,7 @@ From my browser, accessed `http://<Jenkins-Server-Public-IP-Address-or-Public-DN
 
 The default password was retrieved with the command `sudo cat /var/lib/jenkins/secrets/initialAdminPassword`
 
-![step 10 getting the admin password](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/41aeddae-270d-47be-a479-732c75d09a17)
+![step 10 getting the admin password](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/67b560e8-ad9d-4bba-9bda-8b1c65e92206)
 
 Installed the suggested plugins and that completes the installation of Jenkins.
 
@@ -90,10 +90,54 @@ Once plugins installation is done – created an admin user and you will get you
 ![instance configuration](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/922af071-f6b1-4730-9e7f-99ad36d33825)
 
 ### CONFIGURE JENKINS TO RETRIEVE SOURCE CODE FROM GITHUB USING WEBHOOKS
-In my GitHub account, created a new repository and named it 'ansible-config-mgt'
+In my GitHub account, created a new repository and named it 'ansible-config-mgt'.To enable webhooks in GitHub repository, I opened the `ansible-config-mgt` repository. Then click on "settings" and click on "webhooks".
 
- I will be configuring a Jenkins job/project. This job will be triggered by GitHub webhooks and will execute a ‘build’ task to retrieve codes from GitHub and store it locally on the Jenkins server.
+ I will be configuring a Jenkins job/project. This job will be triggered by GitHub webhooks, which I created, and will execute a ‘build’ task to retrieve codes from GitHub and store it locally on the Jenkins server.
 
-To enable webhooks in GitHub repository, I opened the `ansible-config-mgt` repository. Then click on "settings" and click on "webhooks".
+![creating the webhook](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/edcdc1b8-1095-4afa-abe5-e4ab67029aed)
 
-![creating the webhook](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/94e43ea2-acec-43c8-ba64-e3a4f09b8a37)
+
+Configured Jenkins build job to archive your repository content every time you make a change to it.
+
+Created a new Freestyle project `ansible` in Jenkins and pointed it to my `ansible-config-mgt` repository.
+
+![connecting github repo to the jenkins playbook](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/af44d775-a98a-4430-9c8a-7f308870b2a1)
+
+![clicked this to fix the error](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/9e2def2e-99e9-43f2-8f21-38b848616f11)
+
+edited from 'master' to 'main'
+
+![edited from master to main](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/9bf5ffcf-d980-47d2-ba37-18641b3e26f5)
+
+Configured a post-build job to save all (**) files.
+
+![Configure a post-build job to save all () files](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/63451084-7d69-4996-b165-2bc83b109663)
+
+![successfully built ansible](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/5f96e6d0-d1fa-41b2-9f8c-fbcff3cfe0cf)
+
+Tested my setup by making some change in README.md file in master branch, to be sure that builds starts automatically and Jenkins saves the files (build artifacts) in the folder ls /var/lib/jenkins/jobs/ansible/builds/<build_number>/archive/
+
+![testing by editing the readme file](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/9c09440d-7ce7-4de0-85ae-7c7658137575)
+
+![checking the test on readme file on terminal](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/bd14cecc-0e0f-4d91-b1f4-9181d64a34a9)
+
+###### Note: Trigger Jenkins project execution for main (or master) branch
+
+Tip: Every time you stop/start your Jenkins-Ansible server, you have to reconfigure GitHub webhook to a new IP address. In order to avoid it, it makes sense to allocate an Elastic IP to your Jenkins-Ansible server. Note that Elastic IP is free only when it is being allocated to an EC2 instance so do not forget to release Elastic IP once you terminate your EC2 instance.
+
+### Step 2: Prepare the development environment using Visual Studio Code
+The Dev in DevOpsmeans you will be required to write some codes and should have proper tools to make your coding and debugging comfortable. You need an Integrated Development Environment (IDE). I used using Visual Studio Code (VSC). It is free and versatile and will fully satisfy my development needs.  Configured the visual studio code (VScode) to connect to my newly created GitHub repository; ansible-config-mgt.
+
+![opened my repo on vscode](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/e0c4a470-efaa-49c4-9323-457c390e7a39)
+
+Cloned my ansible-config-mgt repo to my Jenkins-Ansible instance
+git clone <ansible-config-mgt repo link>
+
+![cloning the repo on jenkins-anible repo](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/c3b4d431-fe6c-4168-96dd-da942661a894)
+
+### Step 3: Begin Ansible Development
+In the ansible-config-mgt GitHub repository, create a new branch that will be used for development of a new feature.
+
+git checkout -b new_feature
+
+
