@@ -48,8 +48,35 @@ The main idea of `save_artifacts` project is to save artifacts into `/home/ubunt
 
 ![step 6 successful build of the save artifacts](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/d798168c-9491-4ce0-8a62-c20a56439a53)
 
+Test your setup by making some change in README.md file inside your ansible-config-mgt repository (right inside main branch).
+
+If both Jenkins jobs have completed one after another, we shall see our files inside /home/ubuntu/ansible-config-artifact directory and it will be updated with every commit to your main branch.
+
+![step 8 successful build  in jenkins  after editing the readme file](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/ed0be826-20f2-44ca-a5d0-966331839fd3)
+
+![step 7 files of the ansible-config-mgt in artifacts after the successful build](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/7f153532-d1c3-49fc-a137-3b496fe898ec)
+
+## Refactor Ansible code by importing other playbooks into the site.yml file
+
+Before starting to refactor the codes, I ensured that I have pulled down the latest code from the main branch, and created a new branch, named it  `refactor` .
+
+`git checkout -b refactor`
 
 
+DevOps philosophy implies constant iterative improvement for better efficiency - refactoring is one of the techniques that can be used, but you always have an answer to question "why?".
 
+Why do we need to change something if it works well? good question yea?
+
+In Project 11, all tasks were written in a single playbook `common. yml`, now it is a pretty simple set of instructions for only 2 types of OS, but imagine you have many more tasks and you need to apply this playbook to other servers with different requirements.
+
+In this case, you will have to read through the whole playbook to check if all tasks written there are applicable and is there anything that you need to add for certain server/OS families.
+
+Very fast it will become a tedious exercise and your playbook will become messy with many commented parts. Your DevOps colleagues will not appreciate such organization of your codes and it will be difficult for them to use your playbook.
+
+Most Ansible users, learn the one-file approach first. However, breaking tasks up into different files is an excellent way to organize complex sets of tasks and reuse them.
+
+We will now see re-use in action by importing other playbooks.
+
+Within playbooks folder,  I created a new file and named it `site.yml` - This file will now be considered as an entry point into the entire infrastructure configuration. Other playbooks will be included here as a reference. In otherwords, site.yml will become a parent to all other playbooks that will be developed. Including common.yml that we created previously.
 
 
