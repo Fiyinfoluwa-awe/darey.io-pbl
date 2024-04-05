@@ -3,12 +3,12 @@
 In this project, I will continue working with ansible-config-mgt repository and make some improvements to my code. We will learn to refactor our Ansible code, create assignments and learn how to use imports functionality. Imports allow to effectively re-use previously created playbooks in a new playbook, allowing for reuse when needed.
 
 ## Code Refactoring
-Refactoring is a general term in computer programming. It means making changes to the source code without changing expected behaviour of the software. The main idea of refactoring is to enhance code readability, increase maintainability and extensibility, reduce complexity, add proper commenting without affecting the logic. For this project we will move things around a little in our ansible code from the last project but the overall state of the infrastructure will remain the same.
+**Refactoring** is a general term in computer programming. It means making changes to the source code without changing expected behaviour of the software. The main idea of refactoring is to enhance code readability, increase maintainability and extensibility, reduce complexity, add proper commenting without affecting the logic. For this project we will move things around a little in our ansible code from the last project but the overall state of the infrastructure will remain the same.
 
 Let us review and improve on our Ansible code!
 
-### Step 1: JD
-First, I  made some changes to my Jenkins job. From my  Ansible-Automate-Project, every new change in the codes created a separate directory which is not very convenient when we want to run some commands from one place.
+### Jenkins Job Enhancement
+First, I  made some changes to my Jenkins job. From my  [Ansible-Automate-Project](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/blob/main/Project11_ansible-automate.md), every new change in the codes created a separate directory which is not very convenient when we want to run some commands from one place.
 
 Also, it consumes space on the Jenkins server with each subsequent change. I enhanced it by introducing a new Jenkins project/job. To do this, I  will require a copy Artifact plugin.
 
@@ -36,7 +36,7 @@ Create a new Freestyle project and name it save_artifacts.
 
 This project will be triggered by completion of your existing ansible project. Configure it accordingly.
 
-Note: You can configure number of builds to keep in order to save space on the server, for example, you might want to keep only last 2 or 5 build results. You can also make this change to your ansible job.
+**Note:** You can configure number of builds to keep in order to save space on the server, for example, you might want to keep only last 2 or 5 build results. You can also make this change to your ansible job.
 
 ![step 5 configuration of save artifact](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/951ddb7a-9d8a-43f7-b35b-b229dbbb66c6)
 
@@ -44,13 +44,15 @@ Note: You can configure number of builds to keep in order to save space on the s
 
 The main idea of `save_artifacts` project is to save artifacts into `/home/ubuntu/ansible-config-artifact` directory. To achieve this, created a build step and choose copy artifacts from other project, specify `ansible` as source project and `/home/ubuntu/ansible-config-artifact` as target directory.
 
+
+
 ![step 5c configuration of save artifact](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/7d3e6d60-241b-4e5c-b4c7-53113dff106b)
 
 ![step 6 successful build of the save artifacts](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/d798168c-9491-4ce0-8a62-c20a56439a53)
 
-Test your setup by making some change in README.md file inside your ansible-config-mgt repository (right inside main branch).
+Tested my  setup by making some changes in `README.md` file inside my ansible-config-mgt repository (right inside main branch).
 
-If both Jenkins jobs have completed one after another, we shall see our files inside /home/ubuntu/ansible-config-artifact directory and it will be updated with every commit to your main branch.
+If both Jenkins jobs have been completed one after another, I should see the  files inside /home/ubuntu/ansible-config-artifact directory and it will be updated with every commit to my main branch.
 
 ![step 8 successful build  in jenkins  after editing the readme file](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/ed0be826-20f2-44ca-a5d0-966331839fd3)
 
@@ -62,6 +64,9 @@ Before starting to refactor the codes, I ensured that I have pulled down the lat
 
 `git checkout -b refactor`
 
+![step 9 git satus git pull](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/64725b04-76ec-4310-8123-648424c85f22)
+
+![step 10a making a refactor branch](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/61fb00cd-b6f2-431d-aa0f-edd9b7b6575d)
 
 DevOps philosophy implies constant iterative improvement for better efficiency - refactoring is one of the techniques that can be used, but you always have an answer to question "why?".
 
@@ -73,10 +78,46 @@ In this case, you will have to read through the whole playbook to check if all t
 
 Very fast it will become a tedious exercise and your playbook will become messy with many commented parts. Your DevOps colleagues will not appreciate such organization of your codes and it will be difficult for them to use your playbook.
 
-Most Ansible users, learn the one-file approach first. However, breaking tasks up into different files is an excellent way to organize complex sets of tasks and reuse them.
+Most Ansible users, learn the one-file approach first. However, breaking tasks up into different files is an excellent way to organize complex sets of tasks and re-use them.
 
 We will now see re-use in action by importing other playbooks.
 
-Within playbooks folder,  I created a new file and named it `site.yml` - This file will now be considered as an entry point into the entire infrastructure configuration. Other playbooks will be included here as a reference. In otherwords, site.yml will become a parent to all other playbooks that will be developed. Including common.yml that we created previously.
+Within playbooks folder,  I created a new file and named it `site.yml` - _This file will now be considered as an entry point into the entire infrastructure configuration._ Other playbooks will be included here as a reference. In otherwords, `site.yml` will become a parent to all other playbooks that will be developed. Including common.yml that we created previously.
 
+![step 10b make site yml ](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/93578191-8bbe-43a4-860d-b886f48fea48)
 
+Created a new folder in root of the repository and named it `static-assignments`. This folder is where all other children playbooks will be stored. This is merely for easy organization of our work. It is not an Ansible specific concept, therefore you can choose how you want to organize your work. We will see why the folder's name has a prefix of `static` pretty soon.
+
+![step 10 make branch, make siteyml static -assignment](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/56e39820-5bc5-4d80-a9e4-d8ad3cef5c1b)
+
+Moved `common.yml` file into the newly created `static-assignments` folder.
+
+![step 11 moved common yml to static assignment](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/f5e1d036-8b2c-4081-b6ab-361d79810836)
+
+Inside `site.yml` file, imported `common.yml` playbook using the below commands;
+
+```
+---
+- hosts: all
+- import_playbook: ../static-assignments/common.yml
+```
+
+The above code uses a built-in import_playbook Ansible module.
+
+My folder structure should mimic the below:
+
+```
+├── static-assignments
+│   └── common.yml
+├── inventory
+    └── dev
+    └── stage
+    └── uat
+    └── prod
+└── playbooks
+    └── site.yml
+```
+
+![step 12 imported playbook into siteyml](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/e94690a9-c221-4fe2-9f2d-79bc5394d54c)
+
+Ran ansible-playbook command against the dev environment. Since I would need to apply some tasks to my dev servers and wireshark is already installed, we can go ahead and create another playbook under static-assignments and name it common-del.yml. In this playbook, configure deletion of wireshark utility.
