@@ -120,4 +120,162 @@ My folder structure should mimic the below:
 
 ![step 12 imported playbook into siteyml](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/e94690a9-c221-4fe2-9f2d-79bc5394d54c)
 
-Ran ansible-playbook command against the dev environment. Since I would need to apply some tasks to my dev servers and wireshark is already installed, we can go ahead and create another playbook under static-assignments and name it common-del.yml. In this playbook, configure deletion of wireshark utility.
+Ran ansible-playbook command against the dev environment. Since I would need to apply some tasks to my dev servers and wireshark is already installed, I `can go ahead and create another playbook under static-assignments and name it `common-del.yml`. In this playbook, configure deletion of `wireshark` utility.
+
+```
+---
+- name: update web, nfs and db servers
+hosts: webservers, nfs, db
+remote_user: ec2-user
+become: yes
+become_user: root
+tasks:
+- name: delete wireshark
+    yum:
+    name: wireshark
+    state: removed
+
+- name: update LB server
+hosts: lb
+remote_user: ubuntu
+become: yes
+become_user: root
+tasks:
+- name: delete wireshark
+    apt:
+    name: wireshark-qt
+    state: absent
+    autoremove: yes
+    purge: yes
+    autoclean: yes
+```
+
+![common-del-yml folder](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/d2cdeee2-177f-43de-8ed6-a66db4201816)
+
+updated `site.yml` with `common-del.yml` instead of `common.yml` and ran it against the dev servers.
+
+![edited the site yml file](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/ffcb375a-06b6-4f78-bc19-b8d5220c4201)
+
+Pushed  and committed the codes to github and merged to the main branch
+
+We run the commands 
+
+```
+git status
+git add .
+```
+
+![step 13 git status git add ](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/27dd9666-153b-4ca4-b209-322cbf931a5a)
+
+![step 14 git pull git commit](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/dd52656b-d861-472b-8f68-8b17925732a0)
+
+ created a pull request after  cpmmitting and pushing
+ 
+![step 16 pull request successfully merged](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/8247ed9b-e2bf-4455-988f-f08ce0cf8162)
+
+Before we run we have to configure the ssh-agent as shown in the below screenshot
+
+```
+eval ssh-agent -s
+
+ssh-add itoro-web-server.pem
+
+ssh -A user@<Server_Public_IP_Address>
+
+ssh-add -l
+```
+
+before running the ansible-playbook commmand
+
+The artifact is saved in the `ansible-config-artifact` directory in the jenkins server.
+
+Then run the playbook;
+
+`ansible-playbook -i ansible-config-artifact/inventory/dev.yml ansible-config-artifact/playbooks/site.yaml`
+
+![step 17 playbook delte wireshrk](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/4fd56460-39c2-4f08-b1ad-f1058d5585f0)
+
+![step 17b wireshark delete completed](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/da88feb6-d4b5-4597-8d4b-a1d4621a0ebd)
+
+Checking the servers to be sure wireshark was deleted , which was previously installed 
+To check that wireshark is deleted on all the servers, we run the comand
+
+`wireshark --version`
+
+on the various target servers.
+
+![loadbalncer wireshark deletion check](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/d28fcca2-849e-4dd4-bc6b-4238230362f2)
+
+![nfs wireshark check](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/e0ca4613-4a86-4c8d-b20f-b0d4b80973df)
+
+![webserver1 wireshark check](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/832aab3e-4ebe-4e77-b3b8-d199633660d0)
+
+![webserver 2 wireshark check](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/031046f2-c7fb-426c-a8fa-08a500724df5)
+
+![database wireshark check](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/f4bb11af-fcaf-4295-8c69-6bb4f8b6dd84)
+
+there was all successfully deleted on each server.Now we have have a ready solution to install/delete packages on multiple servers with just one command.
+
+## CONFIGURE UAT WEBSERVERS WITH A ROLE ‘WEBSERVER’
+
+ I configured two new Web Servers as uat. We could write tasks to configure Web Servers in the same playbook, but it would be too messy, instead, I will use a dedicated **role** to make the configuration reusable.
+
+So i launched two EC2 instances using RHEL 8 image, we will use them as our uat servers; Web1-UAT and Web2-UAT.
+
+![uat-webservers created ](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/09df4755-3dd7-49ea-8c17-039c28e5256b)
+
+**Tip:** Do not forget to stop EC2 instances that you are not using at the moment to avoid paying extra. For now, you only need 2 new RHEL 8 servers as Web Servers and 1 existing Jenkins-Ansible server up and running.
+To create a `role`, you must create a directory called `roles/`, relative to the playbook file or in the `/etc/ansible` directory.
+
+There are two ways we can create this folder structure:
+
+First, we can use an Ansible utility called `ansible-galaxy` inside ansible-config-mgt/roles directory (you need to create roles directory upfront).
+
+```
+mkdir roles
+cd roles
+ansible-galaxy init webserver
+```
+ secondly, by create the directory/files structure manually.
+
+**Note:** You can choose either way, but since you store all your codes in GitHub, it is recommended to create folders and files there rather than locally on Jenkins-Ansible server.
+
+The entire folder structure should look like below, but if you create it manually- you can skip creating tests, files vars or remove them if you used ansible-galaxy;
+
+```
+└── webserver
+    ├── README.md
+    ├── defaults
+    │   └── main.yml
+    ├── files
+    ├── handlers
+    │   └── main.yml
+    ├── meta
+    │   └── main.yml
+    ├── tasks
+    │   └── main.yml
+    ├── templates
+    ├── tests
+    │   ├── inventory
+    │   └── test.yml
+    └── vars
+        └── main.yml
+```
+
+After removing unnecessary directories and files, the roles structure should look like below;
+
+```
+└── webserver
+    ├── README.md
+    ├── defaults
+    │   └── main.yml
+    ├── handlers
+    │   └── main.yml
+    ├── meta
+    │   └── main.yml
+    ├── tasks
+    │   └── main.yml
+    └── templates
+```
+
+![created roles (webserver) structure  new ](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/49a38dcb-5482-45d3-8d83-f32d7ec5f037)
