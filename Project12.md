@@ -1,6 +1,6 @@
 # Ansible Refactoring, Assignments & Imports
 ![image](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/941d11cd-c0e5-45c7-97cb-df60cf5ff3cf)
-In this project, I will continue working with ansible-config-mgt repository and make some improvements to my code. We will learn to refactor our Ansible code, create assignments and learn how to use imports functionality. Imports allow to effectively re-use previously created playbooks in a new playbook, allowing for reuse when needed.
+In this project, I continued working with ansible-config-mgt repository and made some improvements to my code. We will learn to refactor our Ansible code, create assignments and learn how to use imports functionality. Imports allow to effectively re-use previously created playbooks in a new playbook, allowing for reuse when needed.
 
 ## Code Refactoring
 **Refactoring** is a general term in computer programming. It means making changes to the source code without changing expected behaviour of the software. The main idea of refactoring is to enhance code readability, increase maintainability and extensibility, reduce complexity, add proper commenting without affecting the logic. For this project we will move things around a little in our ansible code from the last project but the overall state of the infrastructure will remain the same.
@@ -279,3 +279,142 @@ After removing unnecessary directories and files, the roles structure should loo
 ```
 
 ![created roles (webserver) structure  new ](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/49a38dcb-5482-45d3-8d83-f32d7ec5f037)
+
+Updated my inventory ansible-config-mgt/inventory/uat.yml file with IP addresses of your 2 UAT Web servers
+
+```
+[uat-webservers]
+<Web1-UAT-Server-Private-IP-Address> ansible_ssh_user='ec2-user'
+<Web2-UAT-Server-Private-IP-Address> ansible_ssh_user='ec2-user'
+```
+
+![update uat webservers](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/6e638bf7-8846-40ea-9cdf-6185b89ef8a6)
+
+I ensured that I was using ssh-agent to ssh into the Jenkins-Ansible instance, just as I did in project 11;
+
+Using the `sudo vi /etc/ansible/ansible.cfg` command, edit the `/etc/ansible/ansible.cfg` file,  uncommented `roles_path` string and provide a full path to your roles directory., So Ansible could know where to find configured roles.
+
+```
+roles_path    = /home/ubuntu/ansible-config-mgt/roles
+
+
+inventory     = /home/ubuntu/ansible-config-artifact/inventory
+```
+
+![the command to enter the sudo vi ansible cfg](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/2d021f16-3824-4198-bfee-9d0ff2b8e7dd)
+
+![edited the sudo vi ansible ansible cfg roles path](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/891af01d-ff2c-4995-91e1-038678aef254)
+
+It is time to start adding some logic to the webserver role. Going into tasks directory, and within the `main.yml` file, I will start writing configuration tasks to do the following:
+
+
+
+* Install and configure Apache (httpd service)
+* Clone Tooling website from GitHub https://github.com/<your-name>/tooling.git.
+* Ensure the tooling website code is deployed to /var/www/html on each of 2 UAT Web servers.
+* Make sure httpd service is started
+
+Your main.yml may consist of following tasks:
+
+```
+---
+- name: install apache
+  become: true
+  ansible.builtin.yum:
+    name: "httpd"
+    state: present
+
+- name: install git
+  become: true
+  ansible.builtin.yum:
+    name: "git"
+    state: present
+
+- name: clone a repo
+  become: true
+  ansible.builtin.git:
+    repo: https://github.com/<your-name>/tooling.git
+    dest: /var/www/html
+    force: yes
+
+- name: copy html content to one level up
+  become: true
+  command: cp -r /var/www/html/html/ /var/www/
+
+- name: Start service httpd, if not started
+  become: true
+  ansible.builtin.service:
+    name: httpd
+    state: started
+
+- name: recursively remove /var/www/html/html/ directory
+  become: true
+  ansible.builtin.file:
+    path: /var/www/html/html
+    state: absent
+```
+
+![inputted in the task main yml](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/aa618b3f-d9ef-42e1-80c7-7e57ba2590b4)
+
+## Reference 'Webserver' role
+
+Within the static-assignments folder, created a new assignment for uat-webservers `uat-webservers.yml`. This is where I will reference the role.
+
+```
+---
+- hosts: uat-webservers
+  roles:
+     - webserver
+```
+
+![update uat webservers](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/1041c682-7ed7-4642-8ef0-d3011915307e)
+
+Remember that the entry point to the ansible configuration is the `site.yml` file. Therefore, I need to refer my `uat-webservers.yml` role inside `site.yml`.
+So, we should have this in `site.yml`
+
+```
+---
+- hosts: all
+- import_playbook: ../static-assignments/common.yml
+
+- hosts: uat-webservers
+- import_playbook: ../static-assignments/uat-webservers.yml
+```
+## Commit & Test
+Committed the changes made, created a Pull Request and merged them to master branch, making sure webhook triggered two consequent Jenkins jobs, they ran successfully and copied all the files to my Jenkins-Ansible server into `/home/ubuntu/ansible-config-mgt/` directory.
+
+Now I ran the playbook against my uat inventory, here is outcome;
+
+NOTE: Before running the playbook, I ensured that I  tunneled into my Jenkins-Ansible server via ssh-agent
+
+```
+eval `ssh-agent -s`
+ssh-add -k <private_key.pem>
+ssh-add -l
+```
+
+then run the playbook with these commands
+
+```
+cd /home/ubuntu/ansible-config-mgt
+
+ansible-playbook -i /inventory/uat.yml playbooks/site.yaml
+```
+
+![sudo ansible uat webservers](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/1a4ee338-4421-49ac-8a7b-e4b8cda847cd)
+
+![sudo ansible uat webservers contd](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/c185bb6d-c614-44f5-a842-4ec5703d5c5a)
+
+
+I was able to see both of my UAT Web servers configured and I tried to reach them from my browser:
+`http://<Web1-UAT-Server-Public-IP-or-Public-DNS-Name>/index.php`
+or
+`http://<Web1-UAT-Server-Public-IP-or-Public-DNS-Name>/index.php`
+My Ansible architecture now looks like this:
+
+![uatwebserver1 index php](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/ebc04806-de02-4a18-99e6-6fab4c1b5294)
+
+![uat webserver 2 index php](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/436b0881-05bc-4e84-a49b-497ea45b65ca)
+
+
+
