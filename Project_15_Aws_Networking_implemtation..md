@@ -38,3 +38,28 @@ As soon as the VPC is created, it is assigned with a vpc-id and there's a route 
 
 ![2 full view](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/45f9dda1-b144-4e09-bfb1-534a58e0f424)
 
+Now I have a VPC and a route table, but I won't be able to put anything inside. If I try to create and EC2 instance for example, I can't proceed as it requires subnets.
+
+Creating and Configuring Subnets
+---
+
+_What are Subnets?:_
+Subnets are like smaller segments within a VPC that help you organize and manage your resources. Subnets are like dividing an office building into smaller sections, whwere each section represents a department. In this analogy, subnets are created to organize and manage the network effectively.
+
+![image](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/1d0c1973-e495-411d-a955-eea904bd36f9)
+
+
+| Subnet name | AZ | CIDR Block |
+| :---: | :---: | :---:|
+| subnet-public1a | us-east-1a | 10.0.11.0/24 |
+| subnet-public2b | us-east-1b | 10.0.12.0/24 |
+| subnet-private1a | us-east-1a | 10.0.1.0/24 |
+| subnet-private2b | us-east-1b | 10.0.2.0/24 |
+
+Go to VPC > Subnets > Create Subnets and select the VPC that you have created previously.
+
+![creating subnets](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/7c949c85-4a51-4742-aabe-70f70547b175)
+
+![subnet 1](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/9250c7f5-956d-4cfb-b344-ce0f789b08ed)
+
+Enter the subnet setting detail. Don't click the **"create subnet"** button just yet, click the **Add new subnet** button to add the remaining subnets then after completing all the required subnets, `create subnet`.
