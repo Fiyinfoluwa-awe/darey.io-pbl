@@ -62,4 +62,73 @@ Go to VPC > Subnets > Create Subnets and select the VPC that you have created pr
 
 ![subnet 1](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/9250c7f5-956d-4cfb-b344-ce0f789b08ed)
 
-Enter the subnet setting detail. Don't click the **"create subnet"** button just yet, click the **Add new subnet** button to add the remaining subnets then after completing all the required subnets, `create subnet`.
+Enter the subnet setting detail. Don't click the **"create subnet"** button just yet, click the **Add new subnet** button to add the remaining subnets then after completing all the required subnets, `create subnet`. **Note:** if you don't choose a zone , it will be randonly picked by AWS.
+
+I was done creating the subnets, which can be seen on the console. If you missed any, just create a subnet and select your desired VPC. As of now, you can deploy EC@ instances into the VPC  by selecting one of the subnets, but the public subnet doesn't have any internet access at this stage. When you select a public subnet > route, you'll see it uses the main route table and only has the local route for internet access. 
+
+
+![subnets created successfully](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/8028e3af-bd9c-4fbb-86d1-f00bfaadbd12)
+
+Understanding Public and Private Subnets in AWS VPC 
+---
+
+In the world of AWS VPC, think of subnets as individual plots in your land (VPC). Some of these plots (subnets) have direct road access (internet access) - these are public subnets. Others are more private, tucked away without direct road access - these are private subnets.
+
+Creating a Public Subnet 
+---
+Creating a private subnet is like creating a secluded plot without direct road (internet) access. Here's how you do it:
+
+* Go to the AWS VPC page.
+* Find 'Subnets', click on it, then click 'Create subnet'. Give this new plot a name, select the big plot (VPC) you want to divide, and leave the IP settings as they are.
+* Don't attach an Internet Gateway to this subnet, keeping it secluded.
+* The route table for this subnet doesn't allow direct traffic to and from the internet.
+
+
+Creating a Private Subnet 
+---
+
+* Go to the AWS VPC page.
+* Find 'Subnets', click on it, then click 'Create subnet'.
+* Give this new plot a name, select the big plot (VPC) you want to divide, and leave the IP settings as they are.
+* Attach an Internet Gateway to this subnet to provide the road (internet) access.
+* Update the route table associated with this subnet to allow traffic to flow to and from the internet.
+
+  
+Working with Public and Private Subnets
+---
+
+Public subnets are great for resources that need to connect to the internet, like web servers. Private subnets are great for resources that you don't want to expose to the internet, like databases.
+
+Understanding public and private subnets helps you to organize and protect your AWS resources better. Always remember, use public subnets for resources that need internet access and private subnets for resources that you want to keep private.
+
+Introduction to Internet Gateway and Routing Table 
+---
+
+Just like in a real city, in your virtual city (VPC), you need roads (Internet Gateway) for people (data) to come and go. And you also need a map or GPS (Routing Table) to tell people (data) which way to go to reach their destination.
+
+>What is an Internet Gateway?
+
+An Internet Gateway in AWS is like a road that connects your city (VPC) to the outside world (the internet). Without this road, people (data) can't come in or go out of your city (VPC).
+
+Deep Dive into Internet Gateways 
+---
+to give your public subnet access to the main road (internet), you need an Internet Gateway. This acts like the entrance and exit to your property. We'll show you how to create and attach an Internet Gateway to your VPC.
+
+Public Subnets
+---
+
+Technically, the subnets are still private. You'll need these to make it work as public subnets:
+
+* An Internet Gateway (IGW) attached to the VPC
+* Route table with default route towards the IGW
+* Public IP assigned to the AWS resources (e.g., EC2 instances)
+
+Go to VPC > Internet gateways and click **"Create internet gateway"**, Insert a name tag and click **"create internet gateway"**
+
+![internet gateways](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/4039272c-ad76-4762-b3e7-b304d16558e4)
+
+![creating internet gateways](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/932dad91-0c39-48c5-a1f2-81d09504322b)
+
+
+
+
