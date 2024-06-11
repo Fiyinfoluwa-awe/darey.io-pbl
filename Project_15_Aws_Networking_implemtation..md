@@ -127,8 +127,17 @@ Go to VPC > Internet gateways and click **"Create internet gateway"**, Insert a 
 
 ![internet gateways](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/4039272c-ad76-4762-b3e7-b304d16558e4)
 
-![creating internet gateways](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/932dad91-0c39-48c5-a1f2-81d09504322b)
+![creating internet gateways](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/aea3701f-53d0-4dee-8c16-9ca26d2e4782)
 
+Attached the IGW to the 'first-vpc`.
+
+![created the internet gateway](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/821c3a5b-2fe0-494a-9ae9-cb148933e665)
+
+Select the VPC 
+
+![vpc attached to the Igw ](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/74e28896-084f-4ebc-84fd-d776d76851cd)
+
+We want the private subnets to be private , we don't want the private subnets to have a default route to the internet. For 
 
 
 
