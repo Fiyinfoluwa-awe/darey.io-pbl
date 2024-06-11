@@ -137,7 +137,51 @@ Select the VPC
 
 ![vpc attached to the Igw ](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/74e28896-084f-4ebc-84fd-d776d76851cd)
 
-We want the private subnets to be private , we don't want the private subnets to have a default route to the internet. For 
+We want the private subnets to be private , we don't want the private subnets to have a default route to the internet. For that , we'll need to create a seperate route table for the public subnets.
+
+> What is a Routing Table?
+
+
+A Routing Table is like a map or GPS. It tells the people (data) in your city (VPC) which way to go to reach their destination. For example, if the data wants to go to the internet, the Routing Table will tell it to take the road (Internet Gateway) that you built. 
+
+Creating and Configuring Routing Tables
+---
+
+Now that we have our entrance and exit (Internet Gateway), we need to give directions to our directions to our resources.  This is done through a Routing Table. It's like a map, guiding your resources on how to get in and out of your VPC.
+
+Let's go to the route table menu and create a route table for a public subnets. Put a name for the route table e.g, test-vpc -public-rtb and select the desired vpc ; "first-vpc'
+
+![creating a routetable for the public subnets](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/8cb48b40-925d-41d4-835a-4411f95fcd5e)
+
+![created route table](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/1fa8fccd-dd5d-4946-9678-370dd381dc62)
+
+Once created , edit the route table, add a default route to the Internet Gateway (IGW).
+
+![editing the routetable ](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/76658cb1-af84-48bc-bf38-cf23fba4269b)
+
+![editing the routes for private subnets](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/5321ab6e-7cfd-4bd2-9ed8-bac1b25f28ca)
+
+Next, you go to the **"Subnet associations"** tab and click **"Edit subnet associations"**.
+
+Select the public subnets and click **"save associations"**
+
+![editing the subnet associations](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/5d145a5e-681a-4555-b493-cd3e90240bd2)
+
+![updated the route table](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/d1a4257e-fd1b-4580-b368-e19dd0458d88)
+
+That's it! Now that the VPC is ready, you can run an EC2 instance in public subnets, if they need internet access or in private subnets, if they don't.
+
+
+**NOTE:** 
+
+_**test-vpc-public-rtb:** A route table with a target to Internet gateways is a public route table._
+
+_**test-vpc-private-rtb:** A route table with a target to NAT gateway is a private route table._
+
+I also created the route table for the 
+
+
+
 
 
 
