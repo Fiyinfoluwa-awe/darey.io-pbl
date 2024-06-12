@@ -20,7 +20,7 @@ Essentially, there are 3 steps to creating a VPC and configuring core network se
  The Default VPC
 ---
 The default VPC is like a  starter pack provided by Amazon for your cloud resources . It's a pre-configured space in the Amazon cloud where you can immediately start deploying your applications or servoces. 
-It ha sna in-built security and network settings to help you get up and running quickly, but you can adjust these as you see fit.
+It has an in-built security and network settings to help you get up and running quickly, but you can adjust these as you see fit.
 
 A default VPC, which Amazon provides for you in each region ( think of a region as a seperate city), is like a pre-built house in that city. this house comes with some default settings to help you move in and start living
 (or start deploying your applications) immediately. But just like a real house, you can change these settings according to you needs.
@@ -211,6 +211,39 @@ You need to allocate Elastic IP, because is required for the creation of NAT Gat
 
 ![creating the nat gateway ](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/83b1e7c7-82b9-4e41-8264-74e70ddeb306)
 
+Let's go to the route table menu and create a route table for the private subnets.
+
+We can create a route table now.
+
+Let's edit the route table, and add a deafault route to the Network Address Translation (NAT) Gateway
+
+![about to edit the route table for private subnet](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/f36302e3-0aa9-4f84-aed1-27b177baed2b)
+
+Choose the route table **"first-vpc-private-rtb"**, select **"Routes tab"** , and click **"Add Route"**. Under the target, select the NAT Gateway named **"test-nat"**.
+
+![about to edit the route table for private subnet](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/42b6d3f6-d771-4a8c-a15a-8a5539d415fd)
+
+![editing the routes for private subnets](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/ad8ef8ee-5606-4a7b-aadf-9a83fbec7351)
+
+Next, go to the **"Subnet associations"** tab and click **"Edit subnet associations."**
+
+![edited the routes for private subnets](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/b2186ecf-6828-4ada-b890-9843aa04ff94)
 
 
+Summary and Best Practices
+---
 
+To conclude, we'll revisit the importance of NAT Gateways in the context of private subnets and summarize the key points of the course. We'll also share some best practices when working with private subnets and NAT Gateways in AWS.
+
+By the end of this course, we'll have a clear understanding of how private subnets and NAT Gateways work in AWS and how you can use them to maintain security while allowing necessary internet access for your resources.
+
+# Security Group and Network ACLs
+
+Understanding the Differences between Security Groups and Network Access Control Lists (ACLs)
+---
+
+Security groups and network access control lists (ACLs) are both important tools for securing your network on the AWS cloud, but they serve different purposes and have different use cases.
+
+**Security Groups**
+
+![image](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/7c8278a7-b9b4-4668-b2e4-a02fd96362a2)
