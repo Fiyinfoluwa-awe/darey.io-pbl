@@ -159,7 +159,6 @@ Once created , edit the route table, add a default route to the Internet Gateway
 
 ![editing the routetable ](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/76658cb1-af84-48bc-bf38-cf23fba4269b)
 
-![editing the routes for private subnets](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/5321ab6e-7cfd-4bd2-9ed8-bac1b25f28ca)
 
 Next, you go to the **"Subnet associations"** tab and click **"Edit subnet associations"**.
 
@@ -178,9 +177,39 @@ _**test-vpc-public-rtb:** A route table with a target to Internet gateways is a 
 
 _**test-vpc-private-rtb:** A route table with a target to NAT gateway is a private route table._
 
-I also created the route table for the 
+I also created the route table for the private subnet, but the routes have not yet been attached to it (just created)
+
+# NAT Gateway and Privates Subnets
+
+Introduction to Private Subnets and NAT Gateway
+---
+
+In your AWS Virtual Private Cloud (VPC), private subnets are secluded areas where you can place resources that should not be directly exposed to the internet. But what if these resources need to access the internet for updates or downloads? This is where the NAT Gateway comes in.
+
+A private subnet in AWS is like a secure room inside your house (VPC) with no windows or doors to the street (internet). Anything you place in this room (like a database) is not directly accessible from the outside world.
+
+Understanding NAT Gateways
+---
+
+A Network Address Translation (NAT) Gateway acts like a secure door that only opens one way. It allows your resources inside the private subnet to access the internet for things like updates and downloads, but it doesn't allow anything from the internet to enter your private subnet.
+
+A Network Address Translation (NAT) allows instances in your private subnet to connect to outside services like Databases but restricts external services to connecting to these instances.
 
 
+Creating a NAT Gateway and Linking It to a Private Subnet
+---
+
+We'll guide you step-by-step on how to create a NAT Gateway and how to link it to your private subnet. We'll also cover how to configure a route in your routing table to direct outbound internet traffic from your private subnet to the NAT Gateway.
+
+Go to VPC > **NAT Gateways** and click **"Create NAT Gateway"**
+
+![NAT gateways](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/76ca483e-51ab-4761-a4b8-4ff4f451deb1)
+
+Created the NAT Gateway and named it; **"test-nat"** under one of the private subnets which I choose the *'subnet-private1a'* as the subnet.
+
+You need to allocate Elastic IP, because is required for the creation of NAT Gateway. which I did.
+
+![creating the nat gateway ](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/83b1e7c7-82b9-4e41-8264-74e70ddeb306)
 
 
 
