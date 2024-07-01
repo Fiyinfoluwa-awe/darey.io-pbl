@@ -205,3 +205,118 @@ Its a `json` format file that stores information about a user's `ID`, what opera
 According to our architectural design, we require 6 subnets: 2 public, 2 private for webservers and 2 private for data layer. Let us create the first 2 public subnets.
 
 Add the below configuration to the main.tf file:
+
+```
+# Create public subnet1
+resource "aws_subnet" "public1" {
+    vpc_id                     = aws_vpc.main.id
+    cidr_block                 = "172.16.0.0/24"
+    map_public_ip_on_launch    = true
+    availability_zone          = "us-east-1a"
+
+}
+
+# Create public subnet2
+resource "aws_subnet" "public2" {
+    vpc_id                     = aws_vpc.main.id
+    cidr_block                 = "172.16.1.0/24"
+    map_public_ip_on_launch    = true
+    availability_zone          = "us-east-1b"
+}
+```
+
+![updated the main tf file , adding public and private subnets](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/bb29c11a-82cd-4245-a457-05075172a3d8)
+
+We are creating 2 subnets, therefore declaring 2 resource blocks - one for each of the subnets.
+
+We are using the `vpc_id` argument to interpolate the value of the VPC `ID` by setting it to `aws_vpc.main.id`. This way, Terraform knows inside which VPC to create the subnet.
+
+> run the command `terraform plan` and `terraform apply`
+
+![terraform plan subnets ](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/54e7dfcd-3160-49e6-bd52-579fb1129e91)
+
+![terraform plan subnets 2](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/c95a0df9-262c-4ced-88a5-e694420084c1)
+
+![terraform apply](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/f983f467-6be0-4011-a615-fc4415f6ef43)
+
+![terraform apply 2](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/51085a6c-6b70-4217-9d82-7e7db92bee4a)
+
+![vpc created by terraform](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/d89d2066-64fa-4460-9fca-c79178c6c50b)
+
+![subnets created by terrraform](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/15cc4967-97c2-4902-95fb-9dedeea099f4)
+
+_**Observations:**_
+
+* Hard coded values: Remember our best practice hint from the beginning? Both `availability_zone` and `cidr_block` arguments are hard coded. We should always endeavour to make our work dynamic.
+
+* Multiple Resource Blocks: Notice that we have declared multiple resource block for each subnet in the code. This is bad coding practice. We need to create a single resource block that can dynamically create resources without specifying multiple blocks. Imagine if we wanted to create 10 subnets, our code would look very clumsy. We need to optimize this by introducing a `count` argument.
+
+_Let us improve our code by refactoring it._
+
+First, destroy the current infrastructure. Since we are still in development, this is totally fine._ Otherwise, **DO NOT DESTROY** an infrastructure that has been deployed to production. To destroy whatever has been creates run:
+
+> `terraform destroy` and type `yes` after evaluating the plan.
+
+![terraform destroy](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/eb11d456-32b2-47cf-9b27-ac6d97b8fddf)
+
+![terraform destroy complete](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/152755bb-497e-4d0d-b159-2385ca6c1947)
+
+
+## Fixing the problem by Code Refactoring
+
+* **Fixing Hard Coded Values:** We will introduce variables, and remove hard coding.
+
+    - Starting with the provider block, declare a variable named `region`, give it a default value and update the provider section by referring to the declared variable.
+
+```
+          variable "region" {
+        default = "us-east-1"
+    }
+
+    provider "aws" {
+        region = var.region
+    }
+```
+
+    - Do the same to `cidr` value in the `vpc` block, and all other arguments.
+
+```
+    variable "region" {
+        default = "us-east-1"
+    }
+
+    variable "vpc_cidr" {
+        default = "172.16.0.0/16"
+    }
+
+    variable "enable_dns_support" {
+        default = "true"
+    }
+
+    variable "enable_dns_hostnames" {
+        default ="true" 
+    }
+
+    variable "enable_classiclink" {
+        default = "false"
+    }
+
+    variable "enable_classiclink_dns_support" {
+        default = "false"
+    }
+
+    provider "aws" {
+    region = var.region
+    }
+
+    # Create VPC
+    resource "aws_vpc" "main" {
+    cidr_block                     = var.vpc_cidr
+    enable_dns_support             = var.enable_dns_support 
+    enable_dns_hostnames           = var.enable_dns_support
+    enable_classiclink             = var.enable_classiclink
+    enable_classiclink_dns_support = var.enable_classiclink
+
+    }
+```
+
