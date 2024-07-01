@@ -55,9 +55,11 @@ Upgraded the pip utility since I was notified of an update.
 `>python`
 
 ```
-# I used the windows terminal so I typed 'py' to enter python
+# I used the windows terminal so I typed 'python' to enter python
 
-> py
+> python
+
+you can also type in `py` instead of `python`
 
 # And paste in the below code
 
@@ -78,4 +80,83 @@ The secret recipe of a successful terraform project consists of:
 
 1) Your understanding of your goal (desired AWS infrastructure end state)
 2) Your knowledge of the IaC technology used (in my case - Terraform)
-3) Your ability to effectively use up-to-date Terraform documentation here
+3) Your ability to effectively use up-to-date Terraform documentation _[here](https://developer.hashicorp.com/terraform/language)_
+
+As we proceed with this project, we will get familiar with [Terraform-specific-technology](https://developer.hashicorp.com/terraform/docs/glossary) such as:
+
+* [Attribute](https://developer.hashicorp.com/terraform/docs/glossary#attribute)
+* [Resource](https://developer.hashicorp.com/terraform/docs/glossary#resource)
+* [Interpolations](https://developer.hashicorp.com/terraform/docs/glossary#interpolation)
+* [Argument](https://developer.hashicorp.com/terraform/docs/glossary#argument)
+* [Providers](https://developer.hashicorp.com/terraform/docs/glossary#terraform-provider)
+* [Provisioners](https://developer.hashicorp.com/terraform/language/resources/provisioners/syntax)
+* [Input Variables](https://developer.hashicorp.com/terraform/docs/glossary#input-variables)
+* [Output Variables](https://developer.hashicorp.com/terraform/docs/glossary#output-values)
+* [Module](https://developer.hashicorp.com/terraform/docs/glossary#module)
+* [Data Source](https://developer.hashicorp.com/terraform/docs/glossary#data-source)
+* [Local Values](https://developer.hashicorp.com/terraform/language/v1.1.x/configuration-0-11/locals)
+* [Backend](https://developer.hashicorp.com/terraform/docs/glossary#backend)
+
+Other concepts to know include `data types` like `Integer`, `Float`, `String`, `Boolean` etc.
+
+```
+Best Practices
+
+- Ensure that every resource is tagged using multiple keyvalue pairs.
+- Try to write reusable code, avoid hard coding values wherever possible.
+```
+
+## Base Infrastructure Automation (VPC | Subnets | Security Groups)
+
+Created a directory structure `Terraform > PBL > main.tf` to the empty file `main.tf` as shown below;
+
+![created PBL and main tf](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/dac4d843-1957-43a6-9114-33e67817cf78)
+
+
+Installed terraform CLI by following [this instruction](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+
+* Added `AWS` as a provider, and a resource to create a VPC in the `main.tf` file.
+
+* Provider block informs Terraform that we intend to build infrastructure within AWS.
+
+* Resource block will create a VPC.
+
+
+Pasted in the code below :
+
+    ```
+    provider "aws" {
+    region = "us-east-1"
+    }
+
+    # Create VPC
+    resource "aws_vpc" "main" {
+    cidr_block                     = "172.16.0.0/16"
+    enable_dns_support             = "true"
+    enable_dns_hostnames           = "true"
+    #enable_classiclink             = "false"
+    #enable_classiclink_dns_support = "false"
+    }
+    ```
+
+![first issue](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/3422ed03-ce2b-4a6d-b11c-2faab668d880)
+
+so I edited the main.tf to this code below, removing the last two lines;
+
+ ```
+    provider "aws" {
+    region = "us-east-1"
+    }
+
+    # Create VPC
+    resource "aws_vpc" "main" {
+    cidr_block                     = "172.16.0.0/16"
+    enable_dns_support             = "true"
+    enable_dns_hostnames           = "true"
+    }
+
+ ```
+
+![terraform init finally worked edited the main tf file](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/9bfec051-fcdf-4039-b01a-1eb679e6b4ef)
+
+**Note** : You should  change the region in the code to your actual region 
