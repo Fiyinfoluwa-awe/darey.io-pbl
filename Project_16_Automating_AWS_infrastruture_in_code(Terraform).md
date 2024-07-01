@@ -48,3 +48,34 @@ Upgraded the pip utility since I was notified of an update.
 
 6) Created an s3 bucket Amazon Simple Storage Service to store terraform state file. My bucket is named `dherby-dev-terraform-bucket`
 
+![s3 bucket successfully created](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/5d6b3e6a-6d59-4a07-949a-338a9143b597)
+
+7) After configuring authentication and installing boto3, confirmed if I can programatically access my AWS account by running the below commands in
+
+`>python`
+
+```
+# I used the windows terminal so I typed 'py' to enter python
+
+> py
+
+# And paste in the below code
+
+import boto3
+s3 = boto3.resource('s3')
+for bucket in s3.buckets.all():
+    print(bucket.name)
+```
+
+I should see my previously created s3 bucket name. In my case `dherby-dev-terraform-bucket`
+
+![import boto3 , had to press enter to print it](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/af0c8b09-b7a0-4e32-8e4c-329df49a4dd5)
+
+## The secrets to writing quality Terraform code
+---
+
+The secret recipe of a successful terraform project consists of:
+
+1) Your understanding of your goal (desired AWS infrastructure end state)
+2) Your knowledge of the IaC technology used (in my case - Terraform)
+3) Your ability to effectively use up-to-date Terraform documentation here
