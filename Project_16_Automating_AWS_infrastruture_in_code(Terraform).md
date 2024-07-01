@@ -141,7 +141,17 @@ Pasted in the code below :
 
 ![first issue](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/3422ed03-ce2b-4a6d-b11c-2faab668d880)
 
-so I edited the main.tf to this code below, removing the last two lines;
+
+**Note** : You should  change the region in the code to your actual region 
+
+
+* Download necessary plugins for Terraform to work. These plugins are used by `providers` and `provisioners`. At this stage, we only have `provider` in our `main.tf` file. So Terraform will download only plugin for AWS provider.
+
+* Ran the command `terraform init` as seen below:
+
+![terraform init](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/84154850-f6c1-4e65-b47b-49695af5a531)
+
+the `terraform init` didn't work as it should (it didn't create a lock file named `.terraform.lock.hcl`). So I had to edit the code in the `main.tf` file, removing the last two lines and then run it again;
 
  ```
     provider "aws" {
@@ -159,4 +169,39 @@ so I edited the main.tf to this code below, removing the last two lines;
 
 ![terraform init finally worked edited the main tf file](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/9bfec051-fcdf-4039-b01a-1eb679e6b4ef)
 
-**Note** : You should  change the region in the code to your actual region 
+* _Notice the new `.terraform\...` directory that is created. This is where Terraform keeps plugins. Generally, it is safe to delete this folder. It just means that you must execute `terraform init` again to download them._
+
+* Now we can create the only resource we just defined. `aws_vpc`. But first we should check to see what terraform intends to create before we tell it to go ahead and create it. To do this run the command `terraform plan` and if you are happy with the planned changes the execute:
+
+ > `terraform apply`.
+
+![ran terraform plan](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/aaf4226f-b143-4612-8a68-86df454e13f1)
+
+**Observations:**
+
+1) A new file is created `terraform.tfstate`. This is how Terraform keeps itself up to date with the exact state of the infrastructure. It reads this file to know what already exists, what should be added, or destroyed based on the entire terraform code that is being developed.
+
+2) If you also observed closely, you would realise that another file gets created during planning and apply. But this file gets deleted immediately. `terraform.tfstate.lock.info` This is what Terraform uses to track who is running its code against the infrastructure at any point in time. This is very important for teams working on the same Terraform repository at the same time. The lock prevents a user from executing Terraform configuration against the same infrastructure when another user is doing the same - it allows to avoid duplicates and conflicts.
+
+Its content is usually like this below. More on this later.
+
+
+```
+    {
+        "ID":"e5e5ad0e-9cc5-7af1-3547-77bb3ee0958b",
+        "Operation":"OperationTypePlan","Info":"",
+        "Who":"dare@Dare","Version":"0.13.4",
+        "Created":"2020-10-28T19:19:28.261312Z",
+        "Path":"terraform.tfstate"
+    }
+```
+
+Its a `json` format file that stores information about a user's `ID`, what operation he/she is doing, timestamp and location of the `state` file.
+
+## Refactoring bad practice
+
+### Subnets resource section
+
+According to our architectural design, we require 6 subnets: 2 public, 2 private for webservers and 2 private for data layer. Let us create the first 2 public subnets.
+
+Add the below configuration to the main.tf file:
