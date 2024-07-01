@@ -548,3 +548,135 @@ resource "aws_subnet" "public" {
 
 **Note:** You can also try changing the value of `preferred_number_of_public_subnets` variable to`null` and notice how many subnets get created.
 
+## Variables & tfvars
+
+Introducing variables.tf & terraform.tfvars
+---
+
+Instead of having a long list of variables in main.tf, we can actually make our code a lot more readable and better structured by moving out some parts of the configuration content to other files.
+
+* We will put all variable declarations in a separate file
+* And provide non default values to each of them.
+
+1) Create a new file and name it `variables.tf`
+
+2) Copy all the variable declarations into the new file.
+
+3) Create another file, name it `terraform.tfvars`
+
+4) Set values for each of the variables.
+
+**The resulting code will look like this now:**
+
+**main.tf**
+
+```
+# Get list of availability zones
+data "aws_availability_zones" "available" {
+state = "available"
+}
+
+provider "aws" {
+  region = var.region
+}
+
+# Create VPC
+resource "aws_vpc" "main" {
+  cidr_block                     = var.vpc_cidr
+  enable_dns_support             = var.enable_dns_support 
+  enable_dns_hostnames           = var.enable_dns_support
+  enable_classiclink             = var.enable_classiclink
+  enable_classiclink_dns_support = var.enable_classiclink
+
+}
+
+# Create public subnets
+resource "aws_subnet" "public" {
+  count  = var.preferred_number_of_public_subnets == null ? length(data.aws_availability_zones.available.names) : var.preferred_number_of_public_subnets   
+  vpc_id = aws_vpc.main.id
+  cidr_block              = cidrsubnet(var.vpc_cidr, 4 , count.index)
+  map_public_ip_on_launch = true
+  availability_zone       = data.aws_availability_zones.available.names[count.index]
+}
+```
+
+![final script of main tf](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/acb640fe-e32b-43b1-a983-78b72b37eb43)
+
+![final script of main tf 2](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/ffc4fd51-3e59-49c7-b1ea-57fb6834494d)
+
+**variables.tf**
+
+```
+variable "region" {
+      default = "eu-central-1"
+}
+
+variable "vpc_cidr" {
+    default = "172.16.0.0/16"
+}
+
+variable "enable_dns_support" {
+    default = "true"
+}
+
+variable "enable_dns_hostnames" {
+    default ="true" 
+}
+
+variable "enable_classiclink" {
+    default = "false"
+}
+
+variable "enable_classiclink_dns_support" {
+    default = "false"
+}
+
+  variable "preferred_number_of_public_subnets" {
+      default = null
+}
+```
+
+![created variables tf files and moved the variables](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/8b9e1433-be4c-4e2b-a7e8-97d0c20de8ff)
+
+**terraform.tfvars**
+
+```
+region = "us-east-1"
+
+vpc_cidr = "172.16.0.0/16" 
+
+enable_dns_support = "true" 
+
+enable_dns_hostnames = "true"  
+
+enable_classiclink = "false" 
+
+enable_classiclink_dns_support = "false" 
+
+preferred_number_of_public_subnets = 2
+```
+
+
+The structure in the PBL folder should look like this;
+
+
+```
+└── PBL
+    ├── main.tf
+    ├── terraform.tfstate
+    ├── terraform.tfstate.backup
+    ├── terraform.tfvars
+    └── variables.tf
+```
+
+
+![my final structure ](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/781f52d0-009c-4e6c-9927-3c881873d7f8)
+
+![created terraform tfvars](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/aba7d809-24fc-4e43-bc31-8b98482cc31d)
+
+Then ran `terraform plan` and ensure everything runs fine
+
+![terraform fmt almost at the end](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/0ee53257-5beb-48b3-9723-40055db3ca19)
+
+
+
