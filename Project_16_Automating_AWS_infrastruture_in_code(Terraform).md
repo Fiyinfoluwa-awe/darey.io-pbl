@@ -448,6 +448,9 @@ Now we can update the public subnet block like this:
 ```
 
 
+![edited public subnet 1 , introduced cidr block](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/a7b220fb-0497-4d3a-a6b4-14ef7fc7deb9)
+
+
 _**Observations:**_
 
 * What we have now is sufficient to create the subnet resource required but if you observe, it does not satisfy our business requirement of just `2` subnets. The `length` function will return number 3 to the `count` argument, but what we actually need is `2`.
@@ -463,6 +466,11 @@ Let us fix this:
 }
 ```
 
+
+
+![added variable preferred number of pub subnets](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/2b99802a-567d-48ea-81ff-ad60f1167221)
+
+
 * Next, update the `count` argument with a condition. Terraform needs to check first if there is a desired number of subnets. Otherwise, use the data returned by the `length` function. See how that is presented below.
 
 
@@ -477,6 +485,10 @@ resource "aws_subnet" "public" {
 
 }
 ```
+
+
+![final script of main tf 2](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/654940da-f76b-41d4-9969-c9539b94d1b3)
+
 
 Let us break down the above code:
 
@@ -548,6 +560,12 @@ resource "aws_subnet" "public" {
 }
 
 ```
+
+
+![final script of main tf](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/20dc552e-3cc6-43fc-8cd7-6ac93f084518)
+
+![final script of main tf 2](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/fc68dadc-ae95-4dda-bd23-3de51cedb3a0)
+
 
 **Note:** You can also try changing the value of `preferred_number_of_public_subnets` variable to`null` and notice how many subnets get created.
 
