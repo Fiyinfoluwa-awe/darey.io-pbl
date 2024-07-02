@@ -394,6 +394,9 @@ We will introduce a function `cidrsubnet()` to make this happen. It accepts 3 pa
 
 
 
+![edited public subnet 1 , introduced count](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/5b1d4875-459f-4f01-b7bf-34e62bc453b5)
+
+
 A closer look at `cidrsubnet` - this function works like an algorithm to dynamically create a subnet CIDR per AZ. Regardless of the number of subnets created, it takes care of the cidr value per subnet. 
 
 It's parameters are `cidrsubnet(prefix, newbits, netnum)`.
