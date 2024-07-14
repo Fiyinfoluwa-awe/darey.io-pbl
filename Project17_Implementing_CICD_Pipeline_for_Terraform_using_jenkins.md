@@ -109,7 +109,7 @@ If you really want to get into the details of what the block of code is doing yo
 
 `wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | tee /usr/share/keyrings/hashicorp-archive-keyring.gpg`
 
-1) **Downloading HashiCorp's GPG Key:**
+1) *Downloading HashiCorp's GPG Key:*
   
    `wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | tee /usr/share/keyrings/hashicorp-archive-keyring.gpg`
 
@@ -119,31 +119,72 @@ If you really want to get into the details of what the block of code is doing yo
 
   * `tee /usr/share/keyrings/hashicorp-archive-keyring.gpg` writes the key to the specified file with `.gpg` extension.
 
-2) Displaying the GPG key fingerprint:
+2) *Displaying the GPG key fingerprint:*
 
 `gpg --no-default-keyring --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --fingerprint`
 
   * This command displays the fingerprint of the GPG key. The fingerprint is a unique identifier for the key and is used to verify its authenticity.
 
-3) Confuguring the repository with the GPG key:
+3) *Confuguring the repository with the GPG key:*
 
    `echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list`
 
     * This command adds HashiCorp's repository configuration to the system's package manager (`apt` in this case).
     * It specifies the GPG key to be used for package verification.
 
-4) Updating and installing Terraform:
+4) *Updating and installing Terraform:*
    `RUN apt-get update && apt-get install -y terraform && rm -rf /var/lib/apt/lists/*`
 
    * These commands update the package list, install Terraform, and then remove unnecessary packages lists to reduce the size of the Docker image
 
-5) **WORKDIR /app:** This line sets the working directory to /app. this is where you will enter the container.
-6) **RUN terraform --version:** this command prints the version of Terraform to the console , allowing you to verify that the installation was successful.
-7) **USER jenkins:** this command switches the jenkins user returning to a lower privelege level. This is good for security practice to minimize the risk of running proccesses as the root user within the container.
+5) `WORKDIR /app:` This line sets the working directory to /app. this is where you will enter the container.
+6) `RUN terraform --version:` this command prints the version of Terraform to the console , allowing you to verify that the installation was successful.
+7) `USER jenkins:` this command switches the jenkins user returning to a lower privelege level. This is good for security practice to minimize the risk of running proccesses as the root user within the container.
 
   ## Building and Running the Docker Image
 
-  Make sure that you are inside the folder containing the Dockerfile. The content of the build is sent to the Docker
+  Make sure that you are inside the folder containing the `Dockerfile`.This is generally referred to as the `Docker Build Context`. The build context is the set of files located in the specified directory or path when you build a Docker image using the `docker build command`.  The content of the build is sent to the Docker daemon during the build process, and it serves as the source for building the Docker image.
+
+  1. Build the custom jenkins image
+
+     ` docker build -t jenkins-server .`
+
+     *Notice the `.` at the end. That is the `docker build context`, meaning the current directory where the Dockerfile is.
+
+     ![step 5b finsihed docker build](https://github.com/user-attachments/assets/b97510b7-daf3-485c-896e-74f5fd4f7be7)
+
+
+   2. Run the image into a docker container.
+
+      `docker run -d -p 8080:8080 --name jenkins-server jenkins-server`
+
+      the output should be a hashdata like this:
+
+      `800f8f48466b3419d7cbf37908b12f146120b31260147bdd3b433d23e60f976b`
+      
+      ![step 6 docker run 8080](https://github.com/user-attachments/assets/2106db97-08cf-4b46-8b86-76025b5d423a)
+
+      **Let's break down the command for clear understanding:**
+
+      * `docker run:` This is the command used to run a Docker container.
+
+      * `-d`: This flag stands for "detach". It runs the container in the background, allowing you to continue using the terminal for other commands.
+
+      * `-p 8080:8080`: This flag maps the port 8080 from the host to the port 8080 inside the container. It means that you can access the application running 
+        inside the container on your host machine's port 8080. Simply go to the browser and put in there localhost:8080 to display the application.
+
+      * `--name jenkins-server`: This flag assigns a name to the container. In this case, the name is set to jenkins-server.
+
+       * `jenkins-server`: This is the name of the Docker image that we want to run. It refers to the image named jenkins-server that was built earlier when we 
+           ran `docker build` command.
+
+
+   3. Check the container is running, using; `docker ps`
+     
+         ![step 6 docker run 8080](https://github.com/user-attachments/assets/2c21f253-678a-460e-b7da-a551cbb01baa)
+
+         
+
 
 
 
