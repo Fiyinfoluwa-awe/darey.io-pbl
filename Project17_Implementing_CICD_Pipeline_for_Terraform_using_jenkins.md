@@ -179,9 +179,106 @@ If you really want to get into the details of what the block of code is doing yo
            ran `docker build` command.
 
 
-   3. Check the container is running, using; `docker ps`
+   3. Check the container is running, using; `docker ps`. The output should be similar to;
+
+  ` CONTAINER ID   IMAGE            COMMAND                  CREATED              STATUS              PORTS                               NAMES
+ 800f8f48466b   jenkins-server   "/usr/bin/tini -- /u…"   About a minute ago   Up About a minute   0.0.0.0:8080->8080/tcp, 50000/tcp   jenkins-server`
      
-         ![step 6 docker run 8080](https://github.com/user-attachments/assets/2c21f253-678a-460e-b7da-a551cbb01baa)
+ ![step 6 docker run 8080](https://github.com/user-attachments/assets/2c21f253-678a-460e-b7da-a551cbb01baa)
+
+ 4. Access the jenkins server from the web browser on `localhost:8080`, if you are running Docker Desktop. But since I am running an EC2 instance, so I will use  `publicIP:8080`.
+
+    *Note: Remember to open port 8080 in the security group if you are implementing using an EC2 instance.*
+
+    ![step 7 jenkins sign in](https://github.com/user-attachments/assets/4e5ee084-b07a-4ab4-b007-c69ea1f6dfb5)
+
+  * Run `var/jenkins_home/secrets/initialAdminPassword` to get the Jenkins password, enter it and follow the flow of the website, enter all required information.
+  * Create first admin user and access Jenkins
+
+
+5. Access the Jenkins server directly inside the container, using;
+
+   `docker exec -it  <containerID>  /bin/bash`
+
+**Let's breakdown the command:**
+
+* `docker exec`: This command is used to execute a command in a running Docker container.
+* `it`: These flags are often used together.
+    * `i` stands for 'interactive', which allows you to interact with the container.
+    * `t` allocates a pseudo-TTY, or terminal, enabling a more interactive session.
+ * `containerID` stands for the container ID or container name. It uniquely identifies the running container, so replace it with the actual ID or name of the your container. You can get this from the output of `docker ps`
+ * `/bin/bash`: This is the command that you want to execute inside the container. In this example, it's launching an interactive Bash shell (bash) within the specified container.
+
+So, when you run this command, Docker will:
+
+  * Use the `exec` command to execute a command in a running container.
+  * Use the `it` flags to make the intercation with the container interactive.
+  * Specify the Container ID or Container Name
+  * Specify the command to execute inside the container, which is `/bin/bash`.
+
+You will also notice that once you get into the container, the directory you will find yourself is the `/app`. Which is from the `WORKDIR` directive inside the `Dockerfile`
+
+The output of `docker exec -it  <containerID>  /bin/bash` should look like this;
+
+`jenkins@<containerID>:/app$ pwd
+/app`
+
+6. Retrive the initial Jenkins admin password
+
+From the web UI, there is an instruction to retrive the initial admin password from
+
+`/var/jenkins_home/secrets/initialAdminPassword`
+
+Inside the container, run:
+the output should look like this;
+
+`jenkins@800f8f48466b:/app$ cat /var/jenkins_home/secrets/initialAdminPassword
+a845868b3a404f39b48b1b05137b4888`
+
+7. Installing Jenkins plugins
+   
+   * Paste the initial passwird in the web
+   * Click on "install suggested plugins"
+  
+ 8. Create first admin user and access Jenkins
+
+
+![step 8 Jenkins setup](https://github.com/user-attachments/assets/320eaa43-6995-4bdc-b57a-6d1147c97af5)
+
+
+
+## Setting up Jenkins For Jenkins for Terraform CI/CD
+---
+
+**Jenkins Pipelines for Terraform**
+
+The first question that may come to your mind is *"why do we need to have CI/CD for our infrastructure?"*, 8"I thought CI/CD is for the software code that developers write?"* - Well, you are correct if you have thought of those questions. But the infrastructure in which the software is being operated can also be treated in similar manner, especially now that we can have the entire infrastructure as code through `Terraform`.
+
+Treating our infrastructure the same way we would treat our software presents a set of benefits such as:
+
+1. Automating the release of features into our cloud infrastructure
+2. Experiencing a fast feedback loop for infrastructure changes
+3. Continous testing of our infrastructure
+4. Collaboration and Team Productivity
+5. Rapid Release Cycle and
+6. Risk Reduction in production
+
+Setup Git Respository with Terraform code
+---
+
+The use case we will satisfy is that;
+
+1. The terraform code has an existing set of resources that it creates in your preferred cloud provider.
+2. You as a DevOps engineer intend to create an additional resource by updating the code base with the new resource that needs to be created
+
+Therefore, the first logical thing to have is an existing terraform code. 
+
+if you dont have your own code, you can simply use this github link and fork the respository into your own github account https://github.com/dareyio/terraform-aws-pipeline.git ; It creates Networking later , also - It provisions kubernetes cluster using EKS
+
+Then do the following to test that the code can create existing resources
+
+
+
 
          
 
