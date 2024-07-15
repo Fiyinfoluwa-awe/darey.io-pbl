@@ -324,7 +324,136 @@ Then do the following to test that the code can create existing resources;
 
         ![download of github integration](https://github.com/user-attachments/assets/cb4e6680-538f-4f4f-a01d-83d45b45790a)
 
-     * If everything is successful, then click to restart
+   2. Install the "Terraform" plugin, ths plugin enables seamless integration of Terraform into the terraform pipleines
+
+      The Terraform plugin for Jenkins enables seamless integration of Terraform into Jenkins pipelines. With this plugin, you can manage the installation of mutliple terraform versions, update terraform modules and do much more as documented in the official site https://plugins.jenkins.io/terraform/
+      
+      Navigate to *Manage Jenkins --> Plugins --> Available Plugins --> Terraform
+
+      ![step 18 terraform jenkins plugin](https://github.com/user-attachments/assets/24bbee8e-ac27-4f39-b91c-4b33cf3e78df)
+
+  3. Install the "**AWS Credentials**" for securely managing and using AWS credentials within Jenkins.
+
+     The AWS Credentials plugin is essential for securely managing and utilizing AWS (Amazon Web Services) credentials within Jenkins. This plugin facilitates the secure storage and retrieval of AWS access and secret keys, ensuring that Jenkins jobs and pipelines can securely interact with AWS services during the execution of various tasks and deployments, including terraform runs. You can read more about the plugin here https://plugins.jenkins.io/aws-credentials/
+
+     Navigate to *Manage Jenkins --> Plugins --> Available plugins --> AWS Credentials
+
+     ![step 19 aws credential jenkins plugin](https://github.com/user-attachments/assets/c9aa157a-7547-48f5-8704-d75adfa651de)
+
+     ![step 19b aws credential jenkins plugin](https://github.com/user-attachments/assets/b0f06714-e3e8-4a5c-8554-5fbee3988446)
+
+     * If everything is successful, then click to restart it, run with it;
+
+       `docker restart <containerID>`
+
+     * Check the status of the container again and it should be back up.
+     * Then go back to the browser and access Jenkins.
+     
+    
+       ![step 20 docker restart ](https://github.com/user-attachments/assets/d1e0a486-44b1-4ba8-87f0-b19be4d595d3)
+    
+       ![step 20 restart jenkins](https://github.com/user-attachments/assets/d1750fe6-4baf-40fb-96c2-0c2212a5ef87)
+
+     * Back in Jenkins UI, navigate to the **"Installed plugins"** section and you should now see the newly installed plugin and it is enabled.
+    
+       ![step 21b checking the installed jenkins plugins](https://github.com/user-attachments/assets/7d83ee54-f4ff-4140-ba82-0964f82ba583)
+    
+       ![step 21 checking the installed jenkins plugins](https://github.com/user-attachments/assets/a0ec9625-08d6-4a76-bccd-28ae84c8b69e)
+
+       ![step 21c checking the installed jenkins plugins](https://github.com/user-attachments/assets/ab139951-3543-45b7-be20-34067c6ce45a)
+
+
+     
+
+ ## Configure Github Credentials in Jenkins
+
+Jenkins needs to know how to connect to Github, otherwise i real world cases where repositories are private, it won't know how to access the repository. Hence, the first thing we need to do is to store the github credentials in Jenkins.
+
+*In Github, navigate to your profile --> Click on "Setting" --> then scroll down to --> "Developer Settings"*
+
+*Generate an access token*
+
+![step 22 generate access token](https://github.com/user-attachments/assets/cdd67507-758d-4320-9988-747cf8f463b0)
+
+![step 22b generate access token](https://github.com/user-attachments/assets/d19c0401-d48b-4afe-90ae-d138ba83de18)
+
+![step 22b generate access token](https://github.com/user-attachments/assets/6b890ef8-3e84-45b7-8d4e-144399114f20)
+
+*Copy the access token and save in a notepad for use later*
+
+![step 22d access token generated ](https://github.com/user-attachments/assets/a42fced8-dddc-4656-baf2-d327611f3816)
+
+*In the Jenkins navigate to "Manage Jenkins" --> Click on "Credentials"
+
+![step 23 credentials](https://github.com/user-attachments/assets/5c3176f4-b809-4fdd-ac10-3c86860121be)
+
+*Click om the arrow next to "global" and select "add credentials"*
+
+![step 23b add credentials](https://github.com/user-attachments/assets/9045176b-4450-460a-a3cb-37525f71749a)
+
+*Select username and password.Use the "access token generated earlier as your password, and specify anything descriptive as your ID*
+
+![step 23c credentials created](https://github.com/user-attachments/assets/31d38e8d-ff72-48a5-ab61-20fc39cea488)
+
+*In the credentials section, you will be able to see the created credential*
+
+![step 23d credentials created](https://github.com/user-attachments/assets/070710cd-8754-4cf0-981b-19863febb5d2)
+
+![step 23e credentials created](https://github.com/user-attachments/assets/af167854-6c76-491f-889e-5327b75f6cec)
+
+* Create a second credential for AWS secret and access key. If you have installed the AWS credentials plugin, you will see the "AWS Credentials" kind as shown below. Simply add the new AWS secret and access key generated from AWS console (from creating an IAM user).
+
+![step 24 creating aws credntials ](https://github.com/user-attachments/assets/6f1ce563-029b-4de8-8cb4-fb80c5b6b7c8)
+
+![step 24b created aws credntials ](https://github.com/user-attachments/assets/b6b1cd80-c724-4327-9d76-7000ee7f0b95)
+
+
+##  Set up a Jenkins Multibranch Pipeline;
+
+   * From the Jenkins dashboard, click on "New Item"
+
+     ![step 25 creating new item terraform cicd](https://github.com/user-attachments/assets/ffa2a349-5d86-45bc-a76e-8461dd7f1aff)
+
+   * Give it a name and description
+
+     ![step 25b new item terraform cicd config](https://github.com/user-attachments/assets/c75d9fb5-b4f7-4bef-9898-821eb3086fc1)
+
+   * Select the type of source of the code and Jenkinsfile
+
+     ![step 25c new item terraform cicd config](https://github.com/user-attachments/assets/358b3f82-7528-422c-8b17-87ccc33afafb)
+
+
+     
+
+     
+
+  
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       
+
+       
+       
+    
+       
 
 
      
