@@ -268,14 +268,66 @@ Setup Git Respository with Terraform code
 
 The use case we will satisfy is that;
 
-1. The terraform code has an existing set of resources that it creates in your preferred cloud provider.
-2. You as a DevOps engineer intend to create an additional resource by updating the code base with the new resource that needs to be created
+  1. The terraform code has an existing set of resources that it creates in your preferred cloud provider.
+  2. You as a DevOps engineer intend to create an additional resource by updating the code base with the new resource that needs to be created
 
-Therefore, the first logical thing to have is an existing terraform code. 
+Therefore, the first logical thing to have is an existing terraform code. If you dont have your own code, you can simply use this github link and fork the respository into your own github account https://github.com/dareyio/terraform-aws-pipeline.git ; It creates Networking later , also - It provisions kubernetes cluster using EKS
 
-if you dont have your own code, you can simply use this github link and fork the respository into your own github account https://github.com/dareyio/terraform-aws-pipeline.git ; It creates Networking later , also - It provisions kubernetes cluster using EKS
+![step 9 forked aws pipeline darey ](https://github.com/user-attachments/assets/ea833a62-837d-4d2d-bc4f-982296aef36e)
 
-Then do the following to test that the code can create existing resources
+
+Then do the following to test that the code can create existing resources; 
+
+   1. The `provider.tf` file has an s3 backend configuration. You will need to create your own bucket and update the code
+        * Create an S3 bucket in your AWS account
+
+         ![step 10 s3 busket](https://github.com/user-attachments/assets/63d1fb04-7a5a-4845-b112-626242bc1e8f)
+
+        * Update the bucket name and region from the backend configuration
+
+          ![step 11 edited provider tf](https://github.com/user-attachments/assets/17782ccb-e2a1-4489-9410-feda5b6cfa49)
+
+     
+   2. Push your lastest changes to Github
+
+      ![step 12 git add provider tf](https://github.com/user-attachments/assets/a4894931-5fe0-47e9-9c45-15248e287fe1)
+
+   3. Run Terraform init, plan and apply , to confirm everything works fine.
+
+      ![step 13 terraform init](https://github.com/user-attachments/assets/a4faef2d-7d1e-41d1-bd07-56a862451a43)
+
+      ![step 13 c terraform init complete](https://github.com/user-attachments/assets/7ac9e7ef-6fa4-432b-aaac-f7c8eb8e15ca)
+
+      *terraform plan*
+
+      ![step 14 terraform plan](https://github.com/user-attachments/assets/9371f98b-1769-455f-b52e-49dcf8750a32)
+
+      *terraform apply*
+
+      ![step 15 terraform plan](https://github.com/user-attachments/assets/770db94f-9447-4a86-b4b9-e4c3b8ef6067)
+
+      
+
+**Connect the Github repository to Jenkins**
+
+  1. Install Jenkins Github Plugin;
+
+      * Open Jenkins in your web browser `<publicIP:8080>`
+      * Navigate to `Manage Jenkins` --> `Plugins`
+    
+        ![step 16 manage jenkins](https://github.com/user-attachments/assets/a918635b-dbca-415e-a199-62a2f259333e)
+
+      * Click on `Available plugins`
+      * Scroll down and select the `Github Integration` plugin for installation
+    
+        ![step 17 github integration jenkins plugin](https://github.com/user-attachments/assets/82803997-576f-4d98-bcc9-e37e58effc56)
+
+        ![download of github integration](https://github.com/user-attachments/assets/cb4e6680-538f-4f4f-a01d-83d45b45790a)
+
+     * If everything is successful, then click to restart
+
+
+     
 
 
 
