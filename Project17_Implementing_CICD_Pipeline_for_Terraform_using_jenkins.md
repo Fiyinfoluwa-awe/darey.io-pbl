@@ -1,4 +1,4 @@
-# IMPLEMENTING CICD PIPELINE FOR TERRAFORM USING JENKINS
+# IMPLEMENTING CI/CD PIPELINE FOR TERRAFORM USING JENKINS
 
 I will be implementing  a seamless CI/CD pipeline for Terraform using Jenkins int this project, enabling automated testing, deployment, and management of infrastructure-as-code with ease.
 
