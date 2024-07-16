@@ -385,7 +385,7 @@ Jenkins needs to know how to connect to Github, otherwise i real world cases whe
 
 ![step 22d access token generated ](https://github.com/user-attachments/assets/a42fced8-dddc-4656-baf2-d327611f3816)
 
-*In the Jenkins navigate to "Manage Jenkins" --> Click on "Credentials"
+*In the Jenkins navigate to "Manage Jenkins" --> Click on "Credentials"*
 
 ![step 23 credentials](https://github.com/user-attachments/assets/5c3176f4-b809-4fdd-ac10-3c86860121be)
 
@@ -403,7 +403,7 @@ Jenkins needs to know how to connect to Github, otherwise i real world cases whe
 
 ![step 23e credentials created](https://github.com/user-attachments/assets/af167854-6c76-491f-889e-5327b75f6cec)
 
-* Create a second credential for AWS secret and access key. If you have installed the AWS credentials plugin, you will see the "AWS Credentials" kind as shown below. Simply add the new AWS secret and access key generated from AWS console (from creating an IAM user).
+* Create a second credential for AWS secret and access key. If you have installed the AWS credentials plugin, you will see the "AWS Credentials" kind as shown below. Simply add the new AWS secret and access key generated from AWS console (from creating an IAM user).*
 
 ![step 24 creating aws credntials ](https://github.com/user-attachments/assets/6f1ce563-029b-4de8-8cb4-fb80c5b6b7c8)
 
