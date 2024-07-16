@@ -2,7 +2,7 @@
 
 I will be implementing  a seamless CI/CD pipeline for Terraform using Jenkins int this project, enabling automated testing, deployment, and management of infrastructure-as-code with ease.
 
-## Introduction to CI/CD and its importnave in software development
+## Introduction to CI/CD and its importance in software development
 
 In today's rapidly evolving IT landscape, efficient and reliable deployment of infrastructure is paramount. Continuous Integration and Continuous Deployment (CI/CD) have emerged as indispensable practices, fostering automation and agility in the software development lifecycle. In this project, we will explore the powerful combination of Terraform, a leading Infrastructure as Code (IaC) tool, and Jenkins, a widely used automation server, to streamline and enhance infrastructure deployment workflows.
 
@@ -306,7 +306,9 @@ Then do the following to test that the code can create existing resources;
 
       ![step 15 terraform plan](https://github.com/user-attachments/assets/770db94f-9447-4a86-b4b9-e4c3b8ef6067)
 
-      
+
+      ![the new object in the s3 after terraform paln](https://github.com/user-attachments/assets/077fdce4-5c26-4670-86fd-34592bf7a577)
+
 
 **Connect the Github repository to Jenkins**
 
@@ -421,6 +423,146 @@ Jenkins needs to know how to connect to Github, otherwise i real world cases whe
    * Select the type of source of the code and Jenkinsfile
 
      ![step 25c new item terraform cicd config](https://github.com/user-attachments/assets/358b3f82-7528-422c-8b17-87ccc33afafb)
+
+   * Select the credentials to be used to connect to Github from Jenkins and add the repository URL that was forked earlier. Leave everything as default and save it. 
+
+     ![step 25d new item terraform cicd config png github config](https://github.com/user-attachments/assets/3f9396b4-32c6-4e73-80f5-543574042ce9)
+
+     ![step 25e new item terraform cicd config](https://github.com/user-attachments/assets/d31007ec-385d-4449-a7d5-c6357a462110)
+
+     Pipeline run and console, *Terraform apply* failed
+
+     ![terraform build failed](https://github.com/user-attachments/assets/6d0b3344-89c4-4fb1-a718-bf7272728810)
+
+     the output
+
+     ![build 4 administrator approve or reject build error](https://github.com/user-attachments/assets/5d078894-5653-465d-8972-d4437ced7bd1)
+
+     to fix it the scripts not permitted to use method, we will go to the Jenkins Dashbord, click on *Manage Jenkins*, scroll down to the *Security Tab* and click on *In-process Script Approval*
+
+     ![in process script approval](https://github.com/user-attachments/assets/ab07a2d6-6483-4ca3-9020-424cbd3561e8)
+
+     Signed approval
+
+     ![signed approval](https://github.com/user-attachments/assets/5d91e621-72bb-4be7-bc7c-4bcc42e5cab5)
+
+     A manual intervention step asking for confirmation before proceeding. If 'yes' is clicked, it runs the `terraform init && terraform apply`
+
+     ![do i apply changes yes or no](https://github.com/user-attachments/assets/6dc44063-47fb-4ece-87b6-25e10335da9f)
+
+
+  ### The  Jenkinsfile
+     ---
+
+The Jenkinsfile pipeline automates the process of code checkout, planning infrastructure changes with Terraform, and conditionally applying those changes. It's designed to ensure that changes to infrastructure (managed by Terraform) are reviewed and applied systematically, with an additional manual check before applying changes to critical environments like production.
+
+Let's break down each section.
+
+Pipeline
+---
+
+`pipeline { ... }`: This is the wrapper for the entire pipeline script. Everything that defines what the pipeline does is included within these braces.
+
+Agent 
+---
+`agent any`: THis line specifies that the pipeline can run on any available agent. In Jenkins, an agent is a worker that executes the job. 'Any' means it doesn't require a specific agent configuration.
+
+Environment
+--- 
+`environment { ... }`: This section is used to define environment variables that are applicable to all stages of the pipeline
+
+`TF_CLI_ARGS = '-no-color'`: Sets an environment variable for Terraform. It tells Terraform to not colorize it's output, which can be used for logging and readability in CI/CD environments. Feel free to change this vaalue as you wish.
+
+Stages
+---
+`stages { ... }`: This block defines the various stages of the pipeline. Each stage in the pipeline process.
+
+Stages:Checkout
+---
+
+`stage('Checkout') { ... }`: This is the first stage, named Checkout. It's typically used to checkout source code from a version control system.
+
+`checkout scm`: Checks out source code from the Source Control Management (SCM) system configured for the job (In this case, **Git**).
+
+Stage: Terraform Plan
+---
+
+`stage('Terraform Plan') { ... }`: This stage is responsible for running a Terraform plan.
+
+`withCredentials([aws(...)]) { ... }`: This block securely injects AWS credentials into the environment.
+
+`sh 'terraform init'`: Initializes Terraform in the current directory.
+
+`sh 'terraform plan -out=tfplan'`: Runs Terraform plan and outputs the plan to a file named tfplan.
+
+Stage: Terraform Apply
+---
+
+`stage('terraform apply') { ... }`: This stage applies the changes from Terraform plan to make infrastructure changes.
+
+`when { ... }`: This block sets conditions for executing this stage.
+
+`expression { env.BRANCH_NAME == 'main' }`: This condition checks if the pipeline is running on the main branch.
+
+`expression { ... }`: Checks if the build was triggered by a user action.
+
+`input message: 'Do you want to apply changes?', ok: 'Yes'`: A manual intervention step asking for confirmation before proceeding. If *yes* is clicked, it runs the *"terraform init & apply"* otherwise, the pipeline is aborted.
+
+
+![do i apply changes yes or no](https://github.com/user-attachments/assets/96317c32-8e86-4632-bc05-55a34c74b6f7)
+
+## Enhancing and Extending the Pipeline
+
+Objective
+---
+
+Update the existing pipeline script to include additional stages and improve the existing ones. This will encompass adding new functionality, improving code clarity and ensuring best practices in CI/CD pipelines.
+
+
+1. Create a new branch from the main branch and scan the Jenkins pipeline so that the new branch can be discovered.
+
+   ![created a new branch called refactor](https://github.com/user-attachments/assets/6c893b0d-a3d5-4a2c-8e5f-3a912fda8df9)
+
+2. In the new branch, Correct and Enhance the 'Terraform Apply' Stage. It mistakenly contains a sh 'terraform aply -out=tfplan' command. Correct it to sh 'terraform apply tfplan'.
+
+
+   ![before correction of terraform apply on jenkinsfile](https://github.com/user-attachments/assets/32a5b2c7-05b2-47c3-851e-f3371972e29a)
+
+
+   ![corrected jenkins file terraaform apply](https://github.com/user-attachments/assets/bc583cfe-aeeb-4842-bc03-d1da406015fa)
+
+   
+3. Add logging to track the progress of the pipeline within both Terraform plan & apply. Use the echo command to print messages before and after each execution so that in the console output everyone can understand what is happening at each stage.
+
+
+   ![echo terraform apply in jenkinsfile](https://github.com/user-attachments/assets/6d14147f-0a33-4068-86d8-72ffaa03e0e2)
+
+4. Introduce a new stage in the pipeline script to validate the Terraform configurations using terraform validate. Add the 'Lint Code' Stage, Place this stage before the terraform plan stage. The purpose of this stage is to validate the syntax, consistency and correctness of Terraform configuration files in the directory it is run. It does not access any remote sevices.
+
+
+   ![image](https://github.com/user-attachments/assets/4ca433de-f721-49a4-aeae-253a92b1beed)
+
+5. Introduce a `cleanup` stage. Add a final stage named cleanup that runs regardless of whether previous stages succeeded or failed (use the post-directive). In this stage, include commands to clean up any temporary files or state that the pipeline may have created.Kindly find the link to the documentation on Jenkins Post Directive.
+
+   ![image](https://github.com/user-attachments/assets/9c7d8891-bda4-4af4-b23a-b94830670ed3)
+
+7. Implement Error Handling. Add error handling to the pipeline. For instance, if 'Terraform Apply' fails, the pipeline should handle this gracefully, perhaps by sending a notification or logging detailed error messages.
+8. Document the Pipeline. Add comments to the pipeline script explaining each stage and important commands. This will make the pipeline more maintainable and understandable.
+
+     
+
+
+
+     
+
+
+
+
+
+     
+
+
+    
 
 
      
