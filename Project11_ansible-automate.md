@@ -10,19 +10,27 @@ It is primarily intended for IT professionals, who use it for application deploy
 While Ansible may be at the forefront of automation, systems administration, and DevOps, it's also useful to everyday users. Ansible allows you to configure not just one computer, but potentially a whole network of computers at once, and using it requires no programming skills. Instructions written for Ansible are human- readable. Whether you're entirely new to computers or an expert, Ansible files are easy to understand.
 
 Ansible Client as a Jump Server (Bastion Host)
-A Jump Server (sometimes also referred as Bastion Host) is an intermediary server through which access to internal network can be provided. If you think about the current architecture you are working on, ideally, the webservers would be inside a secured network which cannot be reached directly from the Internet. That means, even DevOps engineers cannot SSH into the Web servers directly and can only access it through a Jump Server - it provides better security and reduces attack surface.
+---
+A [Jump Server](https://en.wikipedia.org/wiki/Jump_server) (sometimes also referred as [Bastion Host](https://en.wikipedia.org/wiki/Bastion_host)) is an intermediary server through which access to internal network can be provided. If you think about the current architecture you are working on, ideally, the webservers would be inside a secured network which cannot be reached directly from the Internet. That means, even DevOps engineers cannot SSH into the Web servers directly and can only access it through a Jump Server - it provides better security and reduces [attack surface](https://en.wikipedia.org/wiki/Attack_surface).
 
-On the diagram below the Virtual Private Network (VPC) is divided into two subnets - Public subnet has public IP addresses and Private subnet is only reachable by private IP addresses.
+On the diagram below the Virtual Private Network (VPC) is divided into [two subnets](https://docs.aws.amazon.com/vpc/latest/userguide/how-it-works.html) - Public subnet has public IP addresses and Private subnet is only reachable by private IP addresses.
 
 bastion
 
-In previous projects we had to perform lots of manual operations to set up virtual servers, install and configure required software and deploy our web applications especially on projects 7 through 10. This project however, will make us appreciate DevOps tools more by making the most of the routine tasks automated with Ansible Configuration Management, at the same time building confidence in writing code using declarative languages such as YAML.
+In previous projects we had to perform lots of manual operations to set up virtual servers, install and configure required software and deploy our web applications especially on projects 7 through 10. This project however, will make us appreciate DevOps tools more by making the most of the routine tasks automated with [Ansible Configuration Management](https://www.redhat.com/en/topics/automation/what-is-configuration-management#:~:text=Configuration%20management%20is%20a%20process,in%20a%20desired%2C%20consistent%20state.&text=Managing%20IT%20system%20configurations%20involves,building%20and%20maintaining%20those%20systems.), at the same time building confidence in writing code using declarative languages such as YAML.
 
 In this project, I will install and configure Ansible client as a Jump Server/Bastion Host and create a simple Ansible Playbook to automate servers configuration.
 
 ## Install and Configure Ansible on EC2 Instance
 ### Installing and Configuring Jenkins and Ansible on EC2
 
+Initial steps 
+---
+1. Update the `Name` tag on my Jenkins Ec2 instance ti Jenkins-Ansible . This server will be used to run the playbooks.
+2. In the github account, create a new repository and name it `ansible-config-mgt`.
+3. Install Ansible(see: [install Ansible with pip](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible-with-pip))
+
+   
 I created an AWS EC2 Server Instance running on  Ubuntu OS {Jenkins-Ansible}.
 
 ![step 1  created jenkins-ansible instance](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/9583a33c-35df-4c02-a932-162488fd7926)
