@@ -163,13 +163,18 @@ We run the commands
 ```
 git status
 git add .
+git commit -m "message"
+git push origin <current branch name>
+git checkout main
+git status
+git pull
 ```
 
 ![step 13 git status git add ](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/27dd9666-153b-4ca4-b209-322cbf931a5a)
 
 ![step 14 git pull git commit](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/dd52656b-d861-472b-8f68-8b17925732a0)
 
- created a pull request after  cpmmitting and pushing
+ created a pull request after  committing and pushing
  
 ![step 16 pull request successfully merged](https://github.com/Fiyinfoluwa-awe/darey.io-pbl/assets/131634975/8247ed9b-e2bf-4455-988f-f08ce0cf8162)
 
@@ -178,7 +183,7 @@ Before we run we have to configure the ssh-agent as shown in the below screensho
 ```
 eval ssh-agent -s
 
-ssh-add itoro-web-server.pem
+ssh-add PBL.pem
 
 ssh -A user@<Server_Public_IP_Address>
 
