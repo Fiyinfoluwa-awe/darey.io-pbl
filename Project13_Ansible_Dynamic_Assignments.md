@@ -49,6 +49,31 @@ My Github repository now has the structure below;
     └── common.yml
 ```
 
+Since, I will be using the same Ansible to configure the multiple environments, and each of these will have certain unique attributes, such as **servername, ip-address,** etc, I will need away to set values to variables per spevific environment. So , I would have to create a folder to keep each environment's variables file. Therefore, I will create a new folder `env-vars`, then for each environments create a new YAml files , whic we will use to set variables. 
+
+The layout would now look this :
+
+```
+├── dynamic-assignments
+│   └── env-vars.yml
+├── env-vars
+    └── dev.yml
+    └── stage.yml
+    └── uat.yml
+    └── prod.yml
+├── inventory
+    └── dev
+    └── stage
+    └── uat
+    └── prod
+├── playbooks
+    └── site.yml
+└── static-assignments
+    └── common.yml
+    └── webservers.yml
+```
+
+
 
 
 
